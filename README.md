@@ -1,2 +1,2 @@
 # ggtracker-backend
-Fetches latest results from [Statistics Sweden's party preference survey (PSU)](https://www.scb.se/hitta-statistik/statistik-efter-amne/demokrati/partisympatier/partisympatiundersokningen-psu/) and serves them to client.
+Fetches results from [Statistics Sweden's party preference survey (PSU)](https://www.scb.se/hitta-statistik/statistik-efter-amne/demokrati/partisympatier/partisympatiundersokningen-psu/) and serves them to client.
