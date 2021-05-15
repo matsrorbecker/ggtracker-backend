@@ -7,7 +7,7 @@ const figureOutPollMonth = require('./lib/figureOutPollMonth')
 const app = express()
 const port = process.env.PORT || 3001
 
-const origin = process.env.NODE_ENV === 'production' ? 'https://rorbecker.com' : '*'
+const origin = process.env.NODE_ENV === 'production' ? 'https://ggtracker.rorbecker.com' : '*'
 app.use(cors({ origin }))
 
 let data = {}
