@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 const schedule = require('node-schedule')
-const fetchData = require('./lib/fetchData')
+const fetchLatest = require('./lib/fetchLatest')
 const figureOutPollMonth = require('./lib/figureOutPollMonth')
 
 const app = express()
@@ -10,10 +10,10 @@ const port = process.env.PORT || 3001
 const origin = process.env.NODE_ENV === 'production' ? 'https://ggtracker.rorbecker.com' : '*'
 app.use(cors({ origin }))
 
-let data = {}
+let latestPoll = {}
 
-app.get('/api/data', (req, res) => {
-  res.json(data)
+app.get('/api/latest', (req, res) => {
+  res.json(latestPoll)
 })
 
 app.listen(port, () => {
@@ -23,7 +23,7 @@ app.listen(port, () => {
 const doStuff = async () => {
   const { pollMonth, previousPollMonth } = figureOutPollMonth()
   try {
-    data = await fetchData(pollMonth, previousPollMonth)
+    latestPoll = await fetchLatest(pollMonth, previousPollMonth)
   } catch (err) {
     console.log('Fel vid hämtning av PSU-data:', err)
   }
