@@ -1,8 +1,10 @@
 const express = require('express')
 const cors = require('cors')
 const schedule = require('node-schedule')
-const fetchLatest = require('./lib/fetchLatest')
+const fetchData = require('./lib/fetchData')
+const fetchLatestPoll = require('./lib/fetchLatestPoll')
 const figureOutPollMonth = require('./lib/figureOutPollMonth')
+const getPreviousPollMonths = require('./lib/getPreviousPollMonths')
 
 const app = express()
 const port = process.env.PORT || 3001
@@ -11,9 +13,14 @@ const origin = process.env.NODE_ENV === 'production' ? 'https://ggtracker.rorbec
 app.use(cors({ origin }))
 
 let latestPoll = {}
+let previousPolls = {}
 
-app.get('/api/latest', (req, res) => {
+app.get('/api/latest', (_, res) => {
   res.json(latestPoll)
+})
+
+app.get('/api/previous', (_, res) => {
+  res.json(previousPolls)
 })
 
 app.listen(port, () => {
@@ -23,7 +30,10 @@ app.listen(port, () => {
 const doStuff = async () => {
   const { pollMonth, previousPollMonth } = figureOutPollMonth()
   try {
-    latestPoll = await fetchLatest(pollMonth, previousPollMonth)
+    const { data, latestPollMonth } = await fetchLatestPoll(pollMonth, previousPollMonth)
+    latestPoll = data
+    const allPreviousPollMonths = getPreviousPollMonths(latestPollMonth)
+    previousPolls = (await fetchData(allPreviousPollMonths, 'tot18+')).data
   } catch (err) {
     console.log('Fel vid hämtning av PSU-data:', err)
   }
